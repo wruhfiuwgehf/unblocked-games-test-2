@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GameItem } from '../types';
-import { Play, Star, Bookmark, Users, Code } from 'lucide-react';
+import { Play, Star, Bookmark, Users, Code, Gamepad2 } from 'lucide-react';
 
 interface GameCardProps {
   game: GameItem;
@@ -15,6 +15,7 @@ export const GameCard: React.FC<GameCardProps> = ({
   isFavorite,
   onToggleFavorite,
 }) => {
+  const [imgFailed, setImgFailed] = useState(false);
   const formattedPlays = game.plays >= 1000 ? `${(game.plays / 1000).toFixed(0)}k` : game.plays;
 
   const isHotOrTrending = game.badge === 'Hot' || game.badge === 'Trending' || game.badge === 'Extreme';
@@ -27,15 +28,20 @@ export const GameCard: React.FC<GameCardProps> = ({
     >
       {/* Thumbnail Aspect Box */}
       <div className="relative w-full aspect-[16/10] bg-black/40 rounded-xl overflow-hidden border border-white/5">
-        <img
-          src={game.thumbnail}
-          alt={game.title}
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-85 group-hover:opacity-100"
-          onError={(e) => {
-            (e.target as HTMLElement).style.display = 'none';
-          }}
-        />
+        {!imgFailed ? (
+          <img
+            src={game.thumbnail}
+            alt={game.title}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-85 group-hover:opacity-100"
+            onError={() => setImgFailed(true)}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-cyan-950/40 via-zinc-900 to-fuchsia-950/40 flex flex-col items-center justify-center p-4">
+            <Gamepad2 className="w-8 h-8 text-cyan-400/70 mb-1" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-gray-400 text-center line-clamp-1">{game.title}</span>
+          </div>
+        )}
 
         {/* Dark Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
