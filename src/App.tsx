@@ -46,7 +46,7 @@ export default function App() {
   // 3. User favorites list
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem('unblocked_favorites');
-    return saved ? JSON.parse(saved) : ['2048-classic', 'snake-neon', 'flappy-bird-classic'];
+    return saved ? JSON.parse(saved) : [];
   });
 
   // 4. Recently played list
@@ -452,22 +452,36 @@ export default function App() {
               ) : (
                 <div className="py-16 text-center space-y-4 bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-md">
                   <div className="w-12 h-12 rounded-2xl bg-white/10 text-cyan-400 flex items-center justify-center mx-auto border border-white/10 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
-                    <SearchX className="w-6 h-6" />
+                    {games.length === 0 ? <Gamepad2 className="w-6 h-6" /> : <SearchX className="w-6 h-6" />}
                   </div>
                   <div>
-                    <h3 className="font-black uppercase text-base text-gray-100">No Titles Found</h3>
+                    <h3 className="font-black uppercase text-base text-gray-100">
+                      {games.length === 0 ? 'No Games in Portal' : 'No Titles Found'}
+                    </h3>
                     <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto">
-                      {searchQuery 
-                        ? `We couldn't find any games matching "${searchQuery}". Try a different keyword or category.`
-                        : 'No games match the active filter criteria.'}
+                      {games.length === 0
+                        ? 'All preloaded games have been removed. You can add your own custom game or embed any playable iframe URL.'
+                        : searchQuery 
+                          ? `We couldn't find any games matching "${searchQuery}". Try a different keyword or category.`
+                          : 'No games match the active filter criteria.'}
                     </p>
                   </div>
-                  <button
-                    onClick={() => { setSearchQuery(''); setSelectedCategory('All'); setShowFavoritesOnly(false); }}
-                    className="px-5 py-2.5 rounded-xl bg-white hover:bg-cyan-400 text-black text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-                  >
-                    Reset All Filters
-                  </button>
+                  {games.length === 0 ? (
+                    <button
+                      onClick={() => setIsAddModalOpen(true)}
+                      className="px-5 py-2.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-black text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(34,211,238,0.3)] inline-flex items-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      Add Custom Game
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { setSearchQuery(''); setSelectedCategory('All'); setShowFavoritesOnly(false); }}
+                      className="px-5 py-2.5 rounded-xl bg-white hover:bg-cyan-400 text-black text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                    >
+                      Reset All Filters
+                    </button>
+                  )}
                 </div>
               )}
             </div>

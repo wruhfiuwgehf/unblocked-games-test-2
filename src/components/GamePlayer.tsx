@@ -44,6 +44,13 @@ export const GamePlayer: React.FC<GamePlayerProps> = ({
   useEffect(() => {
     setIsLoading(true);
     setIframeKey(prev => prev + 1);
+
+    // Fallback safety timeout for iframe loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, [game.id]);
 
   // Fullscreen change listener
@@ -231,8 +238,8 @@ export const GamePlayer: React.FC<GamePlayerProps> = ({
             srcDoc={srcDocContent}
             title={game.title}
             className="w-full h-full border-0"
-            allow="autoplay; fullscreen; gamepad; accelerometer; gyroscope"
-            sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-popups"
+            allow="autoplay; fullscreen; gamepad; accelerometer; gyroscope; pointer-lock"
+            sandbox="allow-scripts allow-popups allow-forms allow-same-origin allow-popups-to-escape-sandbox allow-downloads allow-pointer-lock allow-storage-access-by-user-activation"
             onLoad={() => setIsLoading(false)}
           />
         )}
