@@ -1,0 +1,6 @@
+{
+  "name": "Unblocked Games Portal",
+  "description": "A fast, clean unblocked games portal with curated playable iframe games, categories, favorites, fullscreen mode, and custom game embedding.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
