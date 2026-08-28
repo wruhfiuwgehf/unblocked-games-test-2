@@ -110,7 +110,7 @@ export default function App() {
       setActiveCloak('default');
       localStorage.removeItem('unblocked_cloak_id');
       const link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
-      if (link) link.href = '/favicon.svg';
+      if (link) link.href = './favicon.svg';
       return;
     }
 
